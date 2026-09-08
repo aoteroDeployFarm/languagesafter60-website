@@ -1,0 +1,284 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   Languages After 60 — design tokens
+   Foundation: deep navy / ink. Action: confident blue. Accent: restrained
+   copper. Surfaces: white and lightly warmed paper.
+   All pairings used for text meet WCAG AA at their intended size.
+--------------------------------------------------------------------------- */
+@theme {
+  --font-display: ui-serif, "Iowan Old Style", "Palatino Linotype", Palatino,
+    "Book Antiqua", Georgia, serif;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+
+  /* Ink — the navy foundation */
+  --color-ink-950: #08121f;
+  --color-ink-900: #0e1b2e;
+  --color-ink-800: #16263d;
+  --color-ink-700: #1f3450;
+  --color-ink-600: #2c4666;
+  --color-ink-500: #3d5877;
+
+  /* Muted text on light surfaces */
+  --color-muted-700: #40506a;
+  --color-muted-600: #55657d;
+  /* Darkened from #6b7a90 (4.36:1) so the smallest text still clears AA on
+     white, page, and tinted surfaces. */
+  --color-muted-500: #616d82;
+
+  /* Brand — confident blue */
+  --color-brand-800: #0b3f88;
+  --color-brand-700: #0f4fa8;
+  --color-brand-600: #1461c9;
+  --color-brand-500: #2e7de8;
+  --color-brand-400: #63a0f1;
+  --color-brand-200: #b9d5f9;
+  --color-brand-100: #dbe9fc;
+  --color-brand-50: #eef4fe;
+
+  /* Accent — restrained copper */
+  --color-accent-800: #6f3a11;
+  --color-accent-700: #8c4a16;
+  --color-accent-600: #b45f1e;
+  --color-accent-500: #d4832f;
+  --color-accent-300: #e9b476;
+  --color-accent-100: #f7e6d2;
+  --color-accent-50: #fcf4ea;
+
+  /* Surfaces and lines */
+  --color-surface-page: #fbfaf8;
+  --color-surface-raised: #ffffff;
+  --color-surface-tint: #f3f1ec;
+  --color-surface-sunken: #eceae4;
+  --color-line-strong: #d5d0c6;
+  --color-line: #e3dfd7;
+  --color-line-soft: #eeebe4;
+
+  /* Semantic */
+  --color-success-700: #1c6b45;
+  --color-success-50: #e8f5ee;
+  --color-caution-700: #8a5300;
+  --color-caution-50: #fdf3e0;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  body {
+    background-color: var(--color-surface-page);
+    color: var(--color-ink-900);
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    /* Comfortable default reading size for the intended audience, without
+       resorting to oversized type. */
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* Tailwind v4 defaults borders to currentColor; anchor them to the token. */
+  *,
+  *::before,
+  *::after {
+    border-color: var(--color-line);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.012em;
+    text-wrap: balance;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-brand-500);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background-color: var(--color-brand-100);
+    color: var(--color-ink-900);
+  }
+}
+
+@layer components {
+  .shell {
+    width: 100%;
+    max-width: 72rem;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+
+  @media (min-width: 768px) {
+    .shell {
+      padding-inline: 2rem;
+    }
+  }
+
+  .shell-narrow {
+    width: 100%;
+    max-width: 46rem;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+
+  @media (min-width: 768px) {
+    .shell-narrow {
+      padding-inline: 2rem;
+    }
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid transparent;
+    padding: 0.7rem 1.15rem;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.2;
+    text-align: center;
+    transition:
+      background-color 150ms ease,
+      border-color 150ms ease,
+      color 150ms ease;
+  }
+
+  .btn:disabled,
+  .btn[aria-disabled="true"] {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  .btn-primary {
+    background-color: var(--color-brand-700);
+    color: #fff;
+  }
+
+  .btn-primary:hover:not(:disabled) {
+    background-color: var(--color-brand-800);
+  }
+
+  .btn-secondary {
+    background-color: var(--color-surface-raised);
+    border-color: var(--color-line-strong);
+    color: var(--color-ink-800);
+  }
+
+  .btn-secondary:hover:not(:disabled) {
+    border-color: var(--color-brand-600);
+    color: var(--color-brand-800);
+  }
+
+  .btn-on-ink {
+    background-color: var(--color-surface-raised);
+    color: var(--color-ink-900);
+  }
+
+  .btn-on-ink:hover:not(:disabled) {
+    background-color: var(--color-brand-50);
+  }
+
+  .btn-on-ink-outline {
+    border-color: rgb(255 255 255 / 0.45);
+    color: #fff;
+  }
+
+  .btn-on-ink-outline:hover:not(:disabled) {
+    background-color: rgb(255 255 255 / 0.1);
+    border-color: #fff;
+  }
+
+  .card {
+    background-color: var(--color-surface-raised);
+    border: 1px solid var(--color-line);
+    border-radius: 0.75rem;
+  }
+
+  .eyebrow {
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--color-accent-700);
+  }
+
+  .link-inline {
+    color: var(--color-brand-700);
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+    text-decoration-thickness: 1px;
+  }
+
+  .link-inline:hover {
+    color: var(--color-brand-800);
+    text-decoration-thickness: 2px;
+  }
+
+  /* Long-form editorial copy */
+  .copy > * + * {
+    margin-top: 1.15rem;
+  }
+
+  .copy h2 {
+    font-size: 1.6rem;
+    line-height: 1.25;
+    margin-top: 2.75rem;
+  }
+
+  .copy h3 {
+    font-size: 1.2rem;
+    line-height: 1.3;
+    margin-top: 2rem;
+    font-family: var(--font-sans);
+    font-weight: 700;
+    letter-spacing: 0;
+  }
+
+  .copy p,
+  .copy li {
+    color: var(--color-muted-700);
+  }
+
+  .copy ul {
+    list-style: disc;
+    padding-left: 1.35rem;
+  }
+
+  .copy ol {
+    list-style: decimal;
+    padding-left: 1.35rem;
+  }
+
+  .copy li + li {
+    margin-top: 0.55rem;
+  }
+
+  .copy strong {
+    color: var(--color-ink-900);
+    font-weight: 650;
+  }
+}
