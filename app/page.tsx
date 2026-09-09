@@ -128,11 +128,12 @@ export default function HomePage() {
                 credible
               </h2>
               <p className="mt-4 text-lg text-muted-700">
-                Spanish is the second language I actually learned. It taught me
-                what a plateau feels like, how much of the work is listening
-                rather than studying, and why persistence beats intensity over a
-                long enough run. Russian is that same method applied to a much
-                harder problem.
+                Spanish is the second language I learned. Early classes and
+                years of hearing it around El Paso may have left me with more
+                than I realized, but Spanish became real when work in Mexico
+                made communication necessary. I’m carrying that experience into
+                Russian and Mandarin: listen, use what you know, make mistakes,
+                and keep going.
               </p>
             </div>
             <Link href="/story/spanish" className="btn btn-secondary shrink-0">
