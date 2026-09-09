@@ -6,7 +6,7 @@ import { russianCourse } from "@/lib/course/russian";
 export const metadata: Metadata = {
   title: "Learn Russian",
   description:
-    "Three beginner Russian lessons with Cyrillic, English meaning, stress-marked pronunciation guides, playback, and a knowledge check for each lesson.",
+    "Beginner Russian lessons with Cyrillic, English meaning, stress-marked pronunciation guides, playback, and a knowledge check for each lesson.",
 };
 
 export default function RussianPage() {
@@ -56,9 +56,9 @@ export default function RussianPage() {
             <p>
               That is the point. Learning something genuinely unfamiliar after
               60 is a different exercise from getting better at something I
-              already do. These first three lessons are deliberately small:
-              twelve phrases, learned properly, with the stress in the right
-              place. Twelve phrases said well are worth more than a hundred
+              already do. These lessons are deliberately small: four phrases
+              at a time, learned properly, with the stress in the right place.
+              A handful of phrases said well are worth more than a hundred
               recognised on a screen and forgotten.
             </p>
             <p>

@@ -333,9 +333,9 @@ export function CourseExperience({ course }: { course: Course }) {
           {courseFinished ? (
             <p className="mt-6 rounded-lg border border-success-700/25 bg-success-50 px-4 py-3 text-success-700">
               <span aria-hidden="true">✓ </span>
-              All three lessons complete. More are being written as the study
-              continues — the next set builds on these phrases rather than
-              starting over.
+              All {totalLessons} lessons complete. More are being written as
+              the study continues — the next set builds on these phrases rather
+              than starting over.
             </p>
           ) : null}
         </article>

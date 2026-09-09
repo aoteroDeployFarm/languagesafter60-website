@@ -179,5 +179,55 @@ export const mandarinCourse: Course = {
           "我不明白。 — “I don't understand.” Said early and without apology, it usually gets you a slower, clearer repeat.",
       },
     },
+    {
+      slug: "help-me-understand",
+      number: 4,
+      title: "Help Me Understand",
+      summary:
+        "Ask for a repeat or for slower speech, and explain that you speak only a little Mandarin.",
+      phrases: [
+        {
+          id: "qing-zai-shuo",
+          script: "请再说一遍。",
+          english: "Please say that again",
+          pronunciation: { kind: "pinyin", text: "Qǐng zài shuō yí biàn." },
+          note: "一 is normally yī, but before a falling tone it shifts to rising — yí biàn. The phrase is literally “say it one more time”.",
+        },
+        {
+          id: "qing-shuo-man",
+          script: "请说慢一点。",
+          english: "Please speak a little more slowly",
+          pronunciation: { kind: "pinyin", text: "Qǐng shuō màn yìdiǎn." },
+          note: "Here 一 goes the other way — before the third tone of 点 it becomes falling, yìdiǎn. 一点 softens the request to “a little”.",
+        },
+        {
+          id: "wo-hui-shuo-yidian",
+          script: "我会说一点中文。",
+          english: "I can speak a little Chinese",
+          pronunciation: { kind: "pinyin", text: "Wǒ huì shuō yìdiǎn Zhōngwén." },
+          note: "会 (huì) is “can” in the sense of knowing how. Saying this early sets expectations and usually earns you a slower, more patient conversation.",
+        },
+        {
+          id: "ni-hui-shuo-yingyu",
+          script: "你会说英语吗？",
+          english: "Do you speak English?",
+          pronunciation: { kind: "pinyin", text: "Nǐ huì shuō Yīngyǔ ma?" },
+          note: "你 is the everyday informal “you”. 吗 turns the sentence into a question — the same particle from Lesson 1.",
+        },
+      ],
+      check: {
+        question:
+          "You did not catch what someone said. Which phrase asks them to say it again?",
+        choices: [
+          { id: "a", label: "请再说一遍。", lang: "zh-Hans" },
+          { id: "b", label: "请说慢一点。", lang: "zh-Hans" },
+          { id: "c", label: "我会说一点中文。", lang: "zh-Hans" },
+          { id: "d", label: "你会说英语吗？", lang: "zh-Hans" },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "请再说一遍。 — “Please say that again.” 再…一遍 is literally “one more time”.",
+      },
+    },
   ],
 };

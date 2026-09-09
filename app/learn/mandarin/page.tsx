@@ -6,7 +6,7 @@ import { mandarinCourse } from "@/lib/course/mandarin";
 export const metadata: Metadata = {
   title: "Mandarin After 60",
   description:
-    "Three beginner Mandarin Chinese lessons with Simplified characters, pinyin with tone marks, English meaning, playback, and a knowledge check for each lesson.",
+    "Beginner Mandarin Chinese lessons with Simplified characters, pinyin with tone marks, English meaning, playback, and a knowledge check for each lesson.",
 };
 
 export default function MandarinPage() {
@@ -23,9 +23,9 @@ export default function MandarinPage() {
             Mandarin After 60, four phrases at a time
           </h1>
           <p className="mt-3 text-lg text-muted-700">
-            Twelve phrases you would actually use in a first conversation. See
-            it, hear it, say it aloud, then check yourself. Tones matter, but
-            they are something to listen for — not a test to pass first.
+            Phrases you would actually use in a real conversation. See it,
+            hear it, say it aloud, then check yourself. Tones matter, but they
+            are something to listen for — not a test to pass first.
           </p>
         </header>
 
@@ -77,7 +77,7 @@ export default function MandarinPage() {
               <Link href="/learn/russian" className="link-inline">
                 The Russian lessons
               </Link>{" "}
-              run on the same three-lesson shape, and{" "}
+              run on the same four-phrases-a-lesson shape, and{" "}
               <Link href="/story/spanish" className="link-inline">
                 what Spanish taught me
               </Link>{" "}

@@ -80,7 +80,7 @@ export default function AboutPage() {
             <Link href="/learn/russian" className="card block p-5 hover:border-brand-500">
               <h3 className="font-display text-xl text-ink-900">Russian</h3>
               <p className="mt-2 text-[0.97rem] text-muted-700">
-                Three beginner lessons, built to be spoken aloud. A deliberately
+                Beginner lessons, built to be spoken aloud. A deliberately
                 unfamiliar language, chosen because Spanish offers no shortcut
                 into it.
               </p>

@@ -1,3 +1,6 @@
+import { mandarinCourse } from "./course/mandarin";
+import { russianCourse } from "./course/russian";
+
 /**
  * Site-wide constants. Kept free of environment values and personal paths so
  * everything here is safe to commit.
@@ -20,8 +23,16 @@ export type NavItem = {
 };
 
 export const navigation: NavItem[] = [
-  { href: "/learn/russian", label: "Russian", hint: "Three beginner lessons" },
-  { href: "/learn/mandarin", label: "Mandarin", hint: "Three beginner lessons" },
+  {
+    href: "/learn/russian",
+    label: "Russian",
+    hint: `${russianCourse.lessons.length} beginner lessons`,
+  },
+  {
+    href: "/learn/mandarin",
+    label: "Mandarin",
+    hint: `${mandarinCourse.lessons.length} beginner lessons`,
+  },
   { href: "/music/piano", label: "Piano", hint: "A 90-day experiment" },
   { href: "/story/spanish", label: "Spanish", hint: "What already worked" },
   { href: "/about", label: "About", hint: "The project and the person" },

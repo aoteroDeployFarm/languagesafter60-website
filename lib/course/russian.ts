@@ -269,5 +269,107 @@ export const russianCourse: Course = {
           "«Я не понимаю» — “I don't understand.” Said early and without apology, it usually gets you a slower, clearer repeat.",
       },
     },
+    {
+      slug: "help-me-understand",
+      number: 4,
+      title: "Help Me Understand",
+      summary:
+        "Stay in the conversation when Russian is moving too quickly or something slips past you.",
+      phrases: [
+        {
+          id: "povtorite",
+          script: "Повторите, пожалуйста.",
+          scriptAnnotated: "Повтори́те, пожа́луйста.",
+          english: "Please repeat that",
+          pronunciation: {
+            kind: "stress",
+            words: [
+              [
+                { text: "pa" },
+                { text: "vta" },
+                { text: "ree", stressed: true },
+                { text: "tye" },
+              ],
+              [{ text: "pa" }, { text: "zhal", stressed: true }, { text: "sta" }],
+            ],
+          },
+          note: "The polite form, safe with anyone. Asking for a repeat is an ordinary part of a conversation, not an admission of failure.",
+        },
+        {
+          id: "pomedlennee",
+          script: "Помедленнее, пожалуйста.",
+          scriptAnnotated: "Поме́дленнее, пожа́луйста.",
+          english: "More slowly, please",
+          pronunciation: {
+            kind: "stress",
+            words: [
+              [
+                { text: "pa" },
+                { text: "myed", stressed: true },
+                { text: "lee" },
+                { text: "nye" },
+                { text: "ye" },
+              ],
+              [{ text: "pa" }, { text: "zhal", stressed: true }, { text: "sta" }],
+            ],
+          },
+          note: "Literally “a bit slower”. Shorter than a full sentence and completely natural on its own.",
+        },
+        {
+          id: "ya-nemnogo-govoryu",
+          script: "Я немного говорю по-русски.",
+          scriptAnnotated: "Я немно́го говорю́ по-ру́сски.",
+          english: "I speak a little Russian",
+          pronunciation: {
+            kind: "stress",
+            words: [
+              [{ text: "ya" }],
+              [{ text: "nee" }, { text: "mno", stressed: true }, { text: "ga" }],
+              [{ text: "ga" }, { text: "va" }, { text: "ryu", stressed: true }],
+              [{ text: "pa" }, { text: "roo", stressed: true }, { text: "skee" }],
+            ],
+          },
+          note: "«Немного» is “a little”. Said early, it sets expectations and usually earns you a slower, kinder conversation.",
+        },
+        {
+          id: "vy-govorite-po-angliyski",
+          script: "Вы говорите по-английски?",
+          scriptAnnotated: "Вы говори́те по-англи́йски?",
+          english: "Do you speak English?",
+          pronunciation: {
+            kind: "stress",
+            words: [
+              [{ text: "vy" }],
+              [
+                { text: "ga" },
+                { text: "va" },
+                { text: "ree", stressed: true },
+                { text: "tye" },
+              ],
+              [
+                { text: "pa" },
+                { text: "an" },
+                { text: "glee", stressed: true },
+                { text: "skee" },
+              ],
+            ],
+          },
+          note: "«Вы» is the polite form, used with strangers and anyone you are not on familiar terms with. Worth having ready, even if it is the last resort rather than the first.",
+        },
+      ],
+      check: {
+        question:
+          "Someone is speaking Russian faster than you can follow. Which phrase asks them to slow down?",
+        choices: [
+          { id: "a", label: "Помедленнее, пожалуйста.", lang: "ru" },
+          { id: "b", label: "Повторите, пожалуйста.", lang: "ru" },
+          { id: "c", label: "Я немного говорю по-русски.", lang: "ru" },
+          { id: "d", label: "Вы говорите по-английски?", lang: "ru" },
+        ],
+        correctChoiceId: "a",
+        explanation:
+          "«Помедленнее, пожалуйста» — “More slowly, please.” Short, polite, and usually all it takes.",
+      },
+    },
   ],
 };
