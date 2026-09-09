@@ -226,6 +226,19 @@
     color: var(--color-accent-700);
   }
 
+  /**
+   * A region that receives focus programmatically after the learner jumps to
+   * it. Uses plain :focus rather than :focus-visible on purpose — the element
+   * is only ever focusable from script, so there is no mouse-click case to
+   * suppress, and :focus-visible does not reliably match a scripted focus on a
+   * tabindex="-1" container.
+   */
+  .focus-landmark:focus {
+    outline: 3px solid var(--color-brand-500);
+    outline-offset: 6px;
+    border-radius: 6px;
+  }
+
   .link-inline {
     color: var(--color-brand-700);
     text-decoration: underline;

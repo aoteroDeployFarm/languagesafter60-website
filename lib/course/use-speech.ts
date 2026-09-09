@@ -59,7 +59,13 @@ function selectVoice(
   return null;
 }
 
-export function useCourseSpeech(config: SpeechConfig) {
+/**
+ * @param config  Locale and voice preferences for this course.
+ * @param rate    Speech synthesis rate. Defaults to the pace the courses have
+ *                always used, so callers that do not care keep today's
+ *                behaviour exactly.
+ */
+export function useCourseSpeech(config: SpeechConfig, rate = 0.85) {
   const [status, setStatus] = useState<SpeechStatus>("checking");
   const [speakingId, setSpeakingId] = useState<string | null>(null);
   const voiceRef = useRef<SpeechSynthesisVoice | null>(null);
@@ -125,15 +131,17 @@ export function useCourseSpeech(config: SpeechConfig) {
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = lang;
       if (voiceRef.current) utterance.voice = voiceRef.current;
-      // Slightly under normal pace: this is a pronunciation model, not speech.
-      utterance.rate = 0.85;
+      // Under conversational pace: this is a pronunciation model, not speech.
+      // Clamped because a rate outside this range makes synthesised voices
+      // stop sounding like the language at all.
+      utterance.rate = Math.min(1.2, Math.max(0.5, rate));
       utterance.onend = () => setSpeakingId(null);
       utterance.onerror = () => setSpeakingId(null);
 
       setSpeakingId(id);
       synth.speak(utterance);
     },
-    [lang],
+    [lang, rate],
   );
 
   const available = status === "ready" || status === "no-voice";

@@ -26,3 +26,14 @@ export const navigation: NavItem[] = [
   { href: "/story/spanish", label: "Spanish", hint: "What already worked" },
   { href: "/about", label: "About", hint: "The project and the person" },
 ];
+
+/**
+ * Separated from the content sections above because it is the learner's own
+ * workspace rather than something to read. Kept as its own item so the main
+ * navigation does not grow to six competing links.
+ */
+export const utilityNavItem: NavItem = {
+  href: "/my-learning",
+  label: "My Learning",
+  hint: "Your progress and saved phrases",
+};

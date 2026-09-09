@@ -17,6 +17,9 @@ type PhraseCardProps = {
   isSpeaking: boolean;
   onSpeak: (phrase: Phrase) => void;
   onStop: () => void;
+  /** Whether this phrase is on the learner's practice list. */
+  isSaved: boolean;
+  onToggleSaved: (phrase: Phrase) => void;
 };
 
 export function PhraseCard({
@@ -28,6 +31,8 @@ export function PhraseCard({
   isSpeaking,
   onSpeak,
   onStop,
+  isSaved,
+  onToggleSaved,
 }: PhraseCardProps) {
   return (
     <li className="card p-5 sm:p-6">
@@ -50,7 +55,7 @@ export function PhraseCard({
           </p>
         </div>
 
-        <div className="shrink-0">
+        <div className="flex shrink-0 flex-col gap-2 sm:items-end">
           {canSpeak ? (
             <button
               type="button"
@@ -83,6 +88,29 @@ export function PhraseCard({
               </span>
             </button>
           )}
+
+          {/* Practice list toggle. aria-pressed carries the state for assistive
+              technology; the ★/☆ glyph and the border weight carry it visually,
+              so selection never depends on colour alone. */}
+          <button
+            type="button"
+            aria-pressed={isSaved}
+            onClick={() => onToggleSaved(phrase)}
+            className={`inline-flex w-full items-center justify-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-semibold transition-colors sm:w-auto ${
+              isSaved
+                ? "border-accent-600 bg-accent-50 text-accent-800"
+                : "border-line text-muted-700 hover:border-accent-500 hover:text-ink-900"
+            }`}
+          >
+            <span aria-hidden="true">{isSaved ? "★" : "☆"}</span>
+            <span>
+              {isSaved ? "Saved for practice" : "Practice again"}
+              <span className="sr-only">
+                {" "}
+                — {phrase.english} ({phrase.script})
+              </span>
+            </span>
+          </button>
         </div>
       </div>
 

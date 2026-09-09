@@ -9,6 +9,8 @@ import {
   writeProgress,
 } from "@/lib/course/progress";
 import { useCourseSpeech } from "@/lib/course/use-speech";
+import { useLearning } from "@/lib/profile/use-learning";
+import { PLAYBACK_RATES } from "@/lib/profile/types";
 import { KnowledgeCheck } from "./knowledge-check";
 import { PhraseCard } from "./phrase-card";
 
@@ -23,6 +25,7 @@ import { PhraseCard } from "./phrase-card";
 export function CourseExperience({ course }: { course: Course }) {
   const { lessons, storageKey } = course;
   const totalLessons = lessons.length;
+  const courseList = useMemo(() => [course], [course]);
 
   const [completed, setCompleted] = useState<string[]>(
     emptyProgress.completedLessons,
@@ -32,7 +35,14 @@ export function CourseExperience({ course }: { course: Course }) {
   const [activeSlug, setActiveSlug] = useState(lessons[0].slug);
   const [statusMessage, setStatusMessage] = useState("");
 
-  const speech = useCourseSpeech(course.speech);
+  // My Learning supplies the playback speed and the practice list. It is
+  // deliberately additive: the authoritative lesson progress below still lives
+  // in this course's own storage key, exactly as it did before.
+  const learning = useLearning(courseList);
+  const speech = useCourseSpeech(
+    course.speech,
+    PLAYBACK_RATES[learning.playbackSpeed],
+  );
 
   useEffect(() => {
     const stored = readProgress(storageKey);
@@ -62,8 +72,9 @@ export function CourseExperience({ course }: { course: Course }) {
         writeProgress(storageKey, { completedLessons: next });
         return next;
       });
+      learning.recordPractice(course.id);
     },
-    [storageKey],
+    [storageKey, learning, course.id],
   );
 
   const goToLesson = useCallback(
@@ -80,8 +91,9 @@ export function CourseExperience({ course }: { course: Course }) {
       // Only the script is spoken — never the pinyin or the English.
       speech.speak(phrase.script, phrase.id);
       setStatusMessage(`Playing: ${phrase.english}`);
+      learning.recordPractice(course.id);
     },
-    [speech],
+    [speech, learning, course.id],
   );
 
   const handleStop = useCallback(() => {
@@ -89,12 +101,27 @@ export function CourseExperience({ course }: { course: Course }) {
     setStatusMessage("Playback stopped");
   }, [speech]);
 
+  const handleToggleSaved = useCallback(
+    (phrase: Phrase) => {
+      const nowSaved = !learning.isSaved(course.id, phrase.id);
+      learning.toggleSavedPhrase(course.id, phrase.id);
+      learning.recordPractice(course.id);
+      setStatusMessage(
+        nowSaved
+          ? `Saved for practice: ${phrase.english}`
+          : `Removed from practice: ${phrase.english}`,
+      );
+    },
+    [learning, course.id],
+  );
+
   const handleReset = useCallback(() => {
     clearProgress(storageKey);
     setCompleted([]);
     setActiveSlug(lessons[0].slug);
     setStatusMessage(`${course.shortName} course progress cleared`);
-  }, [course.shortName, lessons, storageKey]);
+    learning.notifyChange();
+  }, [course.shortName, lessons, storageKey, learning]);
 
   const previousLesson = activeIndex > 0 ? lessons[activeIndex - 1] : null;
   const nextLesson =
@@ -258,6 +285,8 @@ export function CourseExperience({ course }: { course: Course }) {
                 isSpeaking={speech.speakingId === phrase.id}
                 onSpeak={handleSpeak}
                 onStop={handleStop}
+                isSaved={learning.isSaved(course.id, phrase.id)}
+                onToggleSaved={handleToggleSaved}
               />
             ))}
           </ul>

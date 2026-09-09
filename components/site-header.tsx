@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useState } from "react";
-import { navigation, site } from "@/lib/site";
+import { navigation, site, utilityNavItem } from "@/lib/site";
 
 export function SiteHeader() {
   const pathname = usePathname();
@@ -54,6 +54,21 @@ export function SiteHeader() {
                 </Link>
               </li>
             ))}
+            {/* The learner's own workspace, set apart from the content links
+                by a rule so six items do not read as one long row. */}
+            <li className="ml-2 border-l border-line pl-2">
+              <Link
+                href={utilityNavItem.href}
+                aria-current={isActive(utilityNavItem.href) ? "page" : undefined}
+                className={`inline-block rounded-md px-3 py-2 text-[0.97rem] font-semibold whitespace-nowrap transition-colors ${
+                  isActive(utilityNavItem.href)
+                    ? "bg-brand-50 text-brand-800"
+                    : "text-brand-700 hover:bg-brand-50 hover:text-brand-800"
+                }`}
+              >
+                {utilityNavItem.label}
+              </Link>
+            </li>
           </ul>
         </nav>
 
@@ -76,6 +91,28 @@ export function SiteHeader() {
       >
         <nav aria-label="Main, mobile" className="shell py-3">
           <ul className="divide-y divide-line-soft">
+            <li>
+              <Link
+                href={utilityNavItem.href}
+                aria-current={
+                  isActive(utilityNavItem.href) ? "page" : undefined
+                }
+                className="block py-3"
+              >
+                <span
+                  className={`block font-semibold ${
+                    isActive(utilityNavItem.href)
+                      ? "text-brand-800"
+                      : "text-brand-700"
+                  }`}
+                >
+                  {utilityNavItem.label}
+                </span>
+                <span className="block text-sm text-muted-600">
+                  {utilityNavItem.hint}
+                </span>
+              </Link>
+            </li>
             {navigation.map((item) => (
               <li key={item.href}>
                 <Link
