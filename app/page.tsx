@@ -23,9 +23,17 @@ export default function HomePage() {
               someone doing the work now.
             </p>
 
-            <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
+            {/* Both language courses are live and interactive, so they carry
+                equal weight; the piano journey stays the outlined secondary
+                action. flex-wrap lets the three fall onto a second row rather
+                than overflowing at tablet widths. */}
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
               <Link href="/learn/russian" className="btn btn-on-ink">
                 Start Russian
+                <span aria-hidden="true">→</span>
+              </Link>
+              <Link href="/learn/mandarin" className="btn btn-on-ink">
+                Start Mandarin
                 <span aria-hidden="true">→</span>
               </Link>
               <Link href="/music/piano" className="btn btn-on-ink-outline">
