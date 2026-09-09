@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { lessons, totalLessons } from "@/lib/russian/lessons";
+import { mandarinCourse } from "@/lib/course/mandarin";
+import { russianCourse } from "@/lib/course/russian";
 import { site } from "@/lib/site";
 
 export default function HomePage() {
@@ -67,7 +68,7 @@ export default function HomePage() {
           </div>
 
           <div>
-            <p className="eyebrow">Why these two, first</p>
+            <p className="eyebrow">What is running now</p>
             <div className="mt-4 space-y-5">
               <TrackCard
                 href="/learn/russian"
@@ -75,7 +76,19 @@ export default function HomePage() {
                 title="Russian"
                 cta="Start lesson 1"
                 body="A new alphabet, unfamiliar sounds, and no shared vocabulary to lean on. Russian was chosen precisely because nothing about Spanish makes it easy. It is the honest test of whether the method transfers."
-                detail={`${totalLessons} lessons ready — ${lessons[0].title}, ${lessons[1].title}, ${lessons[2].title}`}
+                detail={`${russianCourse.lessons.length} lessons ready — ${russianCourse.lessons
+                  .map((lesson) => lesson.title)
+                  .join(", ")}`}
+              />
+              <TrackCard
+                href="/learn/mandarin"
+                kicker="Languages"
+                title="Mandarin"
+                cta="Begin Mandarin"
+                body="Newly begun. No conjugations, no genders, no tenses — and almost all of the difficulty moved into the ear, where pitch is part of the word. A different kind of hard from Russian, and an inviting one for a musician."
+                detail={`${mandarinCourse.lessons.length} lessons ready — ${mandarinCourse.lessons
+                  .map((lesson) => lesson.title)
+                  .join(", ")}`}
               />
               <TrackCard
                 href="/music/piano"
@@ -134,15 +147,18 @@ export default function HomePage() {
           </h2>
           <p className="mt-4 text-lg text-muted-700">
             Over time this site is organised around three kinds of language:
-            expression, vitality, and connection. Right now only two projects
-            are real and documented — Russian and piano — so those are the only
-            two on the site. Mandarin and Portuguese are on the list, not on the
-            menu.
+            expression, vitality, and connection. Only what is genuinely being
+            worked on appears here — Russian, Mandarin, and piano, with Spanish
+            as the record of what came before. Portuguese is on the list, not on
+            the menu.
           </p>
           <div className="mt-7 flex flex-col gap-3 sm:flex-row">
             <Link href="/learn/russian" className="btn btn-primary">
               Start Russian
               <span aria-hidden="true">→</span>
+            </Link>
+            <Link href="/learn/mandarin" className="btn btn-secondary">
+              Begin Mandarin
             </Link>
             <Link href="/music/piano" className="btn btn-secondary">
               Follow the piano journey

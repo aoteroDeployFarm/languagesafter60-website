@@ -1,19 +1,29 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import type { Phrase } from "@/lib/russian/lessons";
-import { lessons, totalLessons } from "@/lib/russian/lessons";
+import type { Course, Phrase } from "@/lib/course/types";
 import {
   clearProgress,
   emptyProgress,
   readProgress,
   writeProgress,
-} from "@/lib/russian/progress";
-import { useRussianSpeech } from "@/lib/russian/use-speech";
+} from "@/lib/course/progress";
+import { useCourseSpeech } from "@/lib/course/use-speech";
 import { KnowledgeCheck } from "./knowledge-check";
 import { PhraseCard } from "./phrase-card";
 
-export function RussianCourse() {
+/**
+ * The shared lesson interface, used by both the Russian and Mandarin courses.
+ *
+ * Everything language-specific arrives through `course`: the lessons, the
+ * script language tag, the speech locale, and the storage key. Nothing about
+ * one course can reach the other — in particular each has its own localStorage
+ * key, so finishing Russian never unlocks a Mandarin lesson or vice versa.
+ */
+export function CourseExperience({ course }: { course: Course }) {
+  const { lessons, storageKey } = course;
+  const totalLessons = lessons.length;
+
   const [completed, setCompleted] = useState<string[]>(
     emptyProgress.completedLessons,
   );
@@ -22,22 +32,22 @@ export function RussianCourse() {
   const [activeSlug, setActiveSlug] = useState(lessons[0].slug);
   const [statusMessage, setStatusMessage] = useState("");
 
-  const speech = useRussianSpeech();
+  const speech = useCourseSpeech(course.speech);
 
   useEffect(() => {
-    const stored = readProgress();
+    const stored = readProgress(storageKey);
     setCompleted(stored.completedLessons);
     // Open on the first lesson the learner has not finished.
     const nextUp = lessons.find(
       (lesson) => !stored.completedLessons.includes(lesson.slug),
     );
-    if (nextUp) setActiveSlug(nextUp.slug);
+    setActiveSlug(nextUp ? nextUp.slug : lessons[0].slug);
     setHydrated(true);
-  }, []);
+  }, [lessons, storageKey]);
 
   const activeLesson = useMemo(
     () => lessons.find((lesson) => lesson.slug === activeSlug) ?? lessons[0],
-    [activeSlug],
+    [lessons, activeSlug],
   );
 
   const activeIndex = lessons.indexOf(activeLesson);
@@ -49,11 +59,11 @@ export function RussianCourse() {
       setCompleted((current) => {
         if (current.includes(slug)) return current;
         const next = [...current, slug];
-        writeProgress({ completedLessons: next });
+        writeProgress(storageKey, { completedLessons: next });
         return next;
       });
     },
-    [],
+    [storageKey],
   );
 
   const goToLesson = useCallback(
@@ -67,7 +77,8 @@ export function RussianCourse() {
 
   const handleSpeak = useCallback(
     (phrase: Phrase) => {
-      speech.speak(phrase.cyrillic, phrase.id);
+      // Only the script is spoken — never the pinyin or the English.
+      speech.speak(phrase.script, phrase.id);
       setStatusMessage(`Playing: ${phrase.english}`);
     },
     [speech],
@@ -79,16 +90,19 @@ export function RussianCourse() {
   }, [speech]);
 
   const handleReset = useCallback(() => {
-    clearProgress();
+    clearProgress(storageKey);
     setCompleted([]);
     setActiveSlug(lessons[0].slug);
-    setStatusMessage("Course progress cleared");
-  }, []);
+    setStatusMessage(`${course.shortName} course progress cleared`);
+  }, [course.shortName, lessons, storageKey]);
 
   const previousLesson = activeIndex > 0 ? lessons[activeIndex - 1] : null;
   const nextLesson =
     activeIndex < lessons.length - 1 ? lessons[activeIndex + 1] : null;
   const courseFinished = hydrated && completedCount === totalLessons;
+
+  const isPinyin = course.pronunciationStyle === "pinyin";
+  const pronunciationLabel = isPinyin ? "Pinyin" : "Pronunciation";
 
   return (
     <div className="grid gap-8 lg:grid-cols-[17rem_1fr] lg:gap-12">
@@ -138,6 +152,8 @@ export function RussianCourse() {
                           : "border-line bg-surface-raised hover:border-brand-400"
                       }`}
                     >
+                      {/* The tick is a shape, not just a colour, so completion
+                          does not depend on perceiving green. */}
                       <span
                         aria-hidden="true"
                         className={`mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full text-xs font-bold ${
@@ -179,8 +195,8 @@ export function RussianCourse() {
           ) : null}
 
           <p className="mt-4 border-t border-line-soft pt-4 text-xs text-muted-500">
-            Progress is saved in this browser only. There is no account, and
-            nothing is sent anywhere.
+            Progress is saved in this browser only, separately for each language.
+            There is no account, and nothing is sent anywhere.
           </p>
         </section>
       </div>
@@ -188,7 +204,9 @@ export function RussianCourse() {
       {/* Active lesson */}
       <div>
         <article aria-labelledby="lesson-heading">
-          <p className="eyebrow">Lesson {activeLesson.number} of {totalLessons}</p>
+          <p className="eyebrow">
+            Lesson {activeLesson.number} of {totalLessons}
+          </p>
           <h2
             id="lesson-heading"
             className="mt-2 font-display text-3xl leading-tight text-ink-900 sm:text-4xl"
@@ -199,16 +217,33 @@ export function RussianCourse() {
             {activeLesson.summary}
           </p>
 
-          <SpeechNotice status={speech.status} />
+          <SpeechNotice status={speech.status} languageName={course.languageName} />
 
-          <p className="mt-6 text-sm text-muted-600">
-            <span className="font-semibold text-ink-800">Reading the guide:</span>{" "}
-            syllables are separated by hyphens, and the{" "}
-            <strong className="font-bold text-ink-900 underline decoration-accent-500 decoration-2 underline-offset-4">
-              STRESSED
-            </strong>{" "}
-            syllable is capitalised. Russian stress changes how the surrounding
-            vowels sound, so it is worth learning with the word.
+          <p className="mt-6 max-w-2xl text-sm text-muted-600">
+            {isPinyin ? (
+              <>
+                <span className="font-semibold text-ink-800">
+                  Reading the pinyin:
+                </span>{" "}
+                pinyin spells out the pronunciation, and the marks above the
+                vowels show the tones — the pitch movement that is part of the
+                word itself. Changing a tone can change the meaning, so listen
+                first and imitate what you hear. Let the marks become a guide
+                rather than a test.
+              </>
+            ) : (
+              <>
+                <span className="font-semibold text-ink-800">
+                  Reading the guide:
+                </span>{" "}
+                syllables are separated by hyphens, and the{" "}
+                <strong className="font-bold text-ink-900 underline decoration-accent-500 decoration-2 underline-offset-4">
+                  STRESSED
+                </strong>{" "}
+                syllable is capitalised. Russian stress changes how the
+                surrounding vowels sound, so it is worth learning with the word.
+              </>
+            )}
           </p>
 
           <ul className="mt-6 space-y-4">
@@ -216,6 +251,9 @@ export function RussianCourse() {
               <PhraseCard
                 key={phrase.id}
                 phrase={phrase}
+                scriptLang={course.scriptLang}
+                languageName={course.languageName}
+                pronunciationLabel={pronunciationLabel}
                 canSpeak={speech.available}
                 isSpeaking={speech.speakingId === phrase.id}
                 onSpeak={handleSpeak}
@@ -265,6 +303,7 @@ export function RussianCourse() {
 
           {courseFinished ? (
             <p className="mt-6 rounded-lg border border-success-700/25 bg-success-50 px-4 py-3 text-success-700">
+              <span aria-hidden="true">✓ </span>
               All three lessons complete. More are being written as the study
               continues — the next set builds on these phrases rather than
               starting over.
@@ -283,15 +322,17 @@ export function RussianCourse() {
 
 function SpeechNotice({
   status,
+  languageName,
 }: {
-  status: ReturnType<typeof useRussianSpeech>["status"];
+  status: ReturnType<typeof useCourseSpeech>["status"];
+  languageName: string;
 }) {
   if (status === "checking" || status === "ready") return null;
 
   const message =
     status === "unsupported"
-      ? "This browser does not support speech playback, so the Play buttons are turned off. The written pronunciation guides below still work on their own."
-      : "This browser can speak, but no Russian voice is installed on this device, so playback may sound wrong. Adding a Russian voice in your system's speech settings fixes it.";
+      ? "This browser does not support speech playback, so the Play buttons are turned off. The written lessons and knowledge checks below work exactly as they are."
+      : `This browser can speak, but no ${languageName} voice is installed on this device, so playback may sound wrong. Adding a ${languageName} voice in your system's speech settings fixes it.`;
 
   return (
     <p className="mt-5 rounded-lg border border-caution-700/25 bg-caution-50 px-4 py-3 text-[0.97rem] text-caution-700">

@@ -9,7 +9,7 @@ export const site = {
   idea:
     "Life is always speaking. We're still learning how to listen — and how to respond.",
   description:
-    "A working record of what an experienced musician and technologist is learning after 60 — starting with Russian and piano.",
+    "A working record of what an experienced musician and technologist is learning after 60 — Russian, Mandarin, and piano.",
 } as const;
 
 export type NavItem = {
@@ -21,6 +21,7 @@ export type NavItem = {
 
 export const navigation: NavItem[] = [
   { href: "/learn/russian", label: "Russian", hint: "Three beginner lessons" },
+  { href: "/learn/mandarin", label: "Mandarin", hint: "Three beginner lessons" },
   { href: "/music/piano", label: "Piano", hint: "A 90-day experiment" },
   { href: "/story/spanish", label: "Spanish", hint: "What already worked" },
   { href: "/about", label: "About", hint: "The project and the person" },

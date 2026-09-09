@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId, useState } from "react";
-import type { KnowledgeCheck as Check } from "@/lib/russian/lessons";
+import type { KnowledgeCheck as Check } from "@/lib/course/types";
 
 type KnowledgeCheckProps = {
   check: Check;
@@ -81,10 +81,7 @@ export function KnowledgeCheck({
                       }}
                       className="size-[1.15rem] shrink-0 accent-brand-600"
                     />
-                    <span
-                      lang={/[Ѐ-ӿ]/.test(choice.label) ? "ru" : undefined}
-                      className="text-ink-900"
-                    >
+                    <span lang={choice.lang} className="text-ink-900">
                       {choice.label}
                     </span>
                   </label>
@@ -121,6 +118,7 @@ export function KnowledgeCheck({
         {result === "correct" ? (
           <div className="rounded-lg border border-success-700/25 bg-success-50 px-4 py-3">
             <p className="font-semibold text-success-700">
+              <span aria-hidden="true">✓ </span>
               Correct — this lesson is marked complete.
             </p>
             <p className="mt-1 text-[0.97rem] text-muted-700">
@@ -130,10 +128,13 @@ export function KnowledgeCheck({
         ) : null}
         {result === "incorrect" ? (
           <div className="rounded-lg border border-caution-700/25 bg-caution-50 px-4 py-3">
-            <p className="font-semibold text-caution-700">Not quite.</p>
+            <p className="font-semibold text-caution-700">
+              <span aria-hidden="true">↻ </span>
+              Not quite — worth another listen.
+            </p>
             <p className="mt-1 text-[0.97rem] text-muted-700">
-              Read back through the phrases above, then try again. Getting this
-              wrong costs nothing.
+              Play the phrases above once more, then try again. Getting this
+              wrong costs nothing, and there is no score being kept.
             </p>
           </div>
         ) : null}

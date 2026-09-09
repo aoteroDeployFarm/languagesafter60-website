@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { RussianCourse } from "@/components/russian/russian-course";
-import { totalLessons } from "@/lib/russian/lessons";
+import { CourseExperience } from "@/components/course/course-experience";
+import { russianCourse } from "@/lib/course/russian";
 
 export const metadata: Metadata = {
   title: "Learn Russian",
@@ -16,7 +16,9 @@ export default function RussianPage() {
           commentary sit below it, not in front of it. */}
       <div className="shell pt-8 pb-16 sm:pt-10">
         <header className="max-w-3xl">
-          <p className="eyebrow">Russian · {totalLessons} beginner lessons</p>
+          <p className="eyebrow">
+            Russian · {russianCourse.lessons.length} beginner lessons
+          </p>
           <h1 className="mt-2 font-display text-3xl leading-tight text-ink-900 sm:text-[2.5rem]">
             Start speaking Russian, four phrases at a time
           </h1>
@@ -27,7 +29,7 @@ export default function RussianPage() {
         </header>
 
         <div className="mt-8">
-          <RussianCourse />
+          <CourseExperience course={russianCourse} />
         </div>
       </div>
 
@@ -65,7 +67,12 @@ export default function RussianPage() {
               <Link href="/story/spanish" className="link-inline">
                 What Spanish taught me
               </Link>{" "}
-              explains why I am building the practice this way.
+              explains why I am building the practice this way. If you would
+              rather start somewhere with no alphabet to learn at all,{" "}
+              <Link href="/learn/mandarin" className="link-inline">
+                Mandarin begins here
+              </Link>
+              .
             </p>
           </div>
         </div>
