@@ -11,6 +11,8 @@ import {
 import { useCourseSpeech } from "@/lib/course/use-speech";
 import { useLearning } from "@/lib/profile/use-learning";
 import { PLAYBACK_RATES } from "@/lib/profile/types";
+import { MissionCallout } from "@/components/mission/mission-callout";
+import { missionForCourse } from "@/lib/mission/registry";
 import { KnowledgeCheck } from "./knowledge-check";
 import { PhraseCard } from "./phrase-card";
 
@@ -163,6 +165,7 @@ export function CourseExperience({ course }: { course: Course }) {
 
   const isPinyin = course.pronunciationStyle === "pinyin";
   const pronunciationLabel = isPinyin ? "Pinyin" : "Pronunciation";
+  const mission = missionForCourse(course.id);
 
   return (
     <div className="grid gap-8 lg:grid-cols-[17rem_1fr] lg:gap-12">
@@ -375,6 +378,12 @@ export function CourseExperience({ course }: { course: Course }) {
               the study continues — the next set builds on these phrases rather
               than starting over.
             </p>
+          ) : null}
+
+          {mission ? (
+            <div className="mt-6">
+              <MissionCallout mission={mission} courseComplete={courseFinished} />
+            </div>
           ) : null}
         </article>
 

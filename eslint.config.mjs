@@ -9,7 +9,9 @@ const compat = new FlatCompat({ baseDirectory: __dirname });
 
 const eslintConfig = [
   {
-    ignores: [".next/**", "node_modules/**", "next-env.d.ts"],
+    // out/ is the static export — generated, minified bundles. Linting it
+    // buries real source findings under thousands of warnings from vendor code.
+    ignores: [".next/**", "out/**", "node_modules/**", "next-env.d.ts"],
   },
   ...compat.extends("next/core-web-vitals", "next/typescript"),
 ];

@@ -11,6 +11,8 @@ import {
   useLearning,
 } from "@/lib/profile/use-learning";
 import type { PlaybackSpeed } from "@/lib/profile/types";
+import { MissionCallout } from "@/components/mission/mission-callout";
+import { missionForCourse } from "@/lib/mission/registry";
 import { PracticeReview } from "./practice-review";
 
 const courseHref: Record<string, string> = {
@@ -371,6 +373,7 @@ function CourseSummary({
   const introduced = phrasesFromCompletedLessons(course, completedLessons).length;
   const next = nextActionFor(course, completedLessons);
   const href = courseHref[course.id];
+  const mission = missionForCourse(course.id);
 
   return (
     <article className="card p-5 sm:p-6">
@@ -449,6 +452,12 @@ function CourseSummary({
           Reset {course.shortName}
         </button>
       </div>
+
+      {mission ? (
+        <div className="mt-4">
+          <MissionCallout mission={mission} courseComplete={done === total} />
+        </div>
+      ) : null}
     </article>
   );
 }
