@@ -438,10 +438,13 @@ function CourseSummary({
         <button type="button" className="btn btn-secondary" onClick={onReview}>
           Review saved phrases
         </button>
+        {/* A secondary button rather than a text link: it is a real action and
+            should look like one, while staying quieter than the primary
+            Start/Continue call to action beside it. */}
         <button
           type="button"
+          className="btn btn-secondary"
           onClick={onReset}
-          className="inline-block py-2.5 text-sm text-muted-600 underline underline-offset-4 hover:text-ink-900"
         >
           Reset {course.shortName}
         </button>
