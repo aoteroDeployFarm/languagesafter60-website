@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Course, Phrase } from "@/lib/course/types";
 import {
   clearProgress,
@@ -35,6 +35,15 @@ export function CourseExperience({ course }: { course: Course }) {
   const [activeSlug, setActiveSlug] = useState(lessons[0].slug);
   const [statusMessage, setStatusMessage] = useState("");
 
+  const lessonRef = useRef<HTMLElement>(null);
+  /**
+   * Bumped only by goToLesson — the one path behind Next, Previous, and the
+   * progress rail. Nothing else moves the viewport: the mount effect and the
+   * reset handler set activeSlug directly, and quiz, playback, practice-again
+   * and speed changes never touch it at all.
+   */
+  const [navRequest, setNavRequest] = useState(0);
+
   // My Learning supplies the playback speed and the practice list. It is
   // deliberately additive: the authoritative lesson progress below still lives
   // in this course's own storage key, exactly as it did before.
@@ -60,6 +69,29 @@ export function CourseExperience({ course }: { course: Course }) {
     [lessons, activeSlug],
   );
 
+  /**
+   * Runs after React has committed the newly selected lesson, so the article
+   * already holds that lesson's content when it scrolls into view. The
+   * ordering comes from the effect itself rather than a timeout, which is what
+   * keeps the behaviour from being intermittent.
+   */
+  useEffect(() => {
+    if (navRequest === 0) return;
+    const article = lessonRef.current;
+    if (!article) return;
+
+    const prefersReducedMotion =
+      typeof window.matchMedia === "function" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    article.scrollIntoView({
+      behavior: prefersReducedMotion ? "auto" : "smooth",
+      block: "start",
+    });
+    // preventScroll keeps focus from fighting the smooth scroll it just began.
+    article.focus({ preventScroll: true });
+  }, [navRequest]);
+
   const activeIndex = lessons.indexOf(activeLesson);
   const completedCount = hydrated ? completed.length : 0;
   const percent = Math.round((completedCount / totalLessons) * 100);
@@ -82,6 +114,7 @@ export function CourseExperience({ course }: { course: Course }) {
       speech.cancel();
       setActiveSlug(slug);
       setStatusMessage("");
+      setNavRequest((n) => n + 1);
     },
     [speech],
   );
@@ -230,7 +263,12 @@ export function CourseExperience({ course }: { course: Course }) {
 
       {/* Active lesson */}
       <div>
-        <article aria-labelledby="lesson-heading">
+        <article
+          ref={lessonRef}
+          tabIndex={-1}
+          aria-labelledby="lesson-heading"
+          className="focus-landmark scroll-mt-24"
+        >
           <p className="eyebrow">
             Lesson {activeLesson.number} of {totalLessons}
           </p>
